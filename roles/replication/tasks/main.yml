@@ -1,0 +1,33 @@
+---
+# tasks file for replication
+
+#- name: Install cli
+#  chdir: /var/www
+#  shell: curl -fL https://getcli.jfrog.io | sh
+#- name: echo jfrog version
+#  shell: ./jfrog --version
+#  chdir: /var/www
+
+- name: Set Variable repo_name of master
+  set_fact: repo_name={{master_repo_name}}
+
+- name: Template Create Repo
+  template: src=repository.json.j2 dest=/tmp/repository.json
+
+- name: Create repo in master artifactory
+  shell: 'curl -u{{master_repo_username}}:{{master_repo_password}} -X PUT {{master_repo_url}}/api/repositories/{{master_repo_name}} -H "content-type: application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json" -T /tmp/repository.json' 
+
+- name: Set Variable repo_name of client
+  set_fact: repo_name={{client_repo_name}}
+
+- name: Template Create Repo
+  template: src=repository.json.j2 dest=/tmp/repository.json
+
+- name: Create repo in client artifactory
+  shell: 'curl -u{{client_repo_username}}:{{client_repo_password}} -X PUT {{client_repo_url}}/api/repositories/{{client_repo_name}} -H "content-type: application/vnd.org.jfrog.artifactory.repositories.LocalRepositoryConfiguration+json" -T /tmp/repository.json'
+
+- name: Template Replication
+  template: src=replication.json.j2 dest=/tmp/replication.json
+
+- name: Create replication between master repo and client repo
+  shell: 'curl -u{{master_repo_username}}:{{master_repo_password}} -X PUT {{master_repo_url}}/api/replications/{{master_repo_name}} -H "content-type: application/vnd.org.jfrog.artifactory.replications.ReplicationConfigRequest+json" -T /tmp/replication.json'
