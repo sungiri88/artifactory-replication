@@ -8,6 +8,10 @@
 #  shell: ./jfrog --version
 #  chdir: /var/www
 
+- name: include ansible vault
+  include_vars: client.yml
+  no_logs: true
+  
 - name: Set Variable repo_name of master
   set_fact: repo_name={{master_repo_name}}
 

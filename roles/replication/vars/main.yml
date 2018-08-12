@@ -5,8 +5,5 @@ master_repo_username: "admin"
 master_repo_password: "password" 
 master_repo_name: "maven_master1"
 client_repo_name: "maven_client1"
-client_list:   
-  - { client_region: asia, client_repo_url: "http://192.168.33.10:8082/artifactory" , client_repo_username: "admin", client_repo_password: "password" }
-  - { client_region: europe, client_repo_url: "http://192.168.33.10:8083/artifactory" , client_repo_username: "admin", client_repo_password: "password" }
 packageType: "maven"
 cron_notation: "0 * * * * ?" 
