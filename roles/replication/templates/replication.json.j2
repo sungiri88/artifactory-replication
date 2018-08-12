@@ -1,13 +1,17 @@
-{
-  "url" : "{{client_repo_url}}/{{client_repo_name}}",
-  "socketTimeoutMillis" : 15000,
-  "username" : "{{client_repo_username}}",
-  "password" : "{{client_repo_password}}",
-  "enableEventReplication" : false,
-  "enabled" : true,
-  "cronExp" : "{{ cron_notation }}",
-  "syncDeletes" : true,
-  "syncProperties" : true,
-  "syncStatistics" : false,
-  "repoKey" : "{{master_repo_name}}"
-}
+[
+  {% for item in client_list %}
+  {
+    "url" : "{{item.client_repo_url}}/{{client_repo_name}}",
+    "socketTimeoutMillis" : 15000,
+    "username" : "{{item.client_repo_username}}",
+    "password" : "{{item.client_repo_password}}",
+    "enableEventReplication" : false,
+    "enabled" : true,
+    "cronExp" : "{{ cron_notation }}",
+    "syncDeletes" : true,
+    "syncProperties" : true,
+    "syncStatistics" : false,
+    "repoKey" : "{{master_repo_name}}"
+  }{% if not loop.last %}, {% endif %}
+  {% endfor %}
+]
